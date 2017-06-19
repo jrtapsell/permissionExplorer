@@ -1,5 +1,6 @@
 package uk.co.jrtapsell.appinfo.data.app;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,46 +14,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import uk.co.jrtapsell.appinfo.R;
 import uk.co.jrtapsell.appinfo.data.permission.MyPermission;
 import uk.co.jrtapsell.appinfo.data.permission.PermissionFactory;
+import uk.co.jrtapsell.appinfo.utils.ColorUtils;
+
+import static android.content.pm.PermissionInfo.PROTECTION_DANGEROUS;
+import static android.content.pm.PermissionInfo.PROTECTION_FLAG_PRIVILEGED;
 
 public class MyApp implements Comparable<MyApp> {
     @NotNull private final String name;
     @NotNull private final Drawable icon;
     @NotNull private final String packageName;
+    private final boolean isInstant;
+    private int color;
 
     @NotNull public List<MyPermission> getPermissions() {
         return permissions;
     }
 
-    @NotNull private final List<MyPermission> permissions;
+    @NotNull private final List<MyPermission> permissions = new ArrayList<>();
 
     MyApp(ApplicationInfo info, PackageManager p) {
+        boolean isInstant = false;
         PermissionFactory pf = PermissionFactory.getInstance(p);
         this.name = Objects.toString(info.loadLabel(p));
         this.icon = info.loadIcon(p);
         this.packageName = info.packageName;
-        List<MyPermission> temp;
         try {
             PackageInfo pi = p.getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS);
-            temp = new ArrayList<>();
             if (pi.requestedPermissions != null) {
                 for (String permName : pi.requestedPermissions) {
                     try {
                         PermissionInfo perm = p.getPermissionInfo(permName, PackageManager.GET_META_DATA);
                         MyPermission myPermission = pf.get(perm);
-                        temp.add(myPermission);
+                        permissions.add(myPermission);
                     } catch (PackageManager.NameNotFoundException ex) {
-                        temp.add(pf.unknownPermission(permName));
+                        permissions.add(pf.unknownPermission(permName));
                     }
                 }
-            } else {
-                temp = new ArrayList<>();
             }
         } catch (PackageManager.NameNotFoundException ex) {
-            temp = new ArrayList<>();
+            isInstant = true;
         }
-        this.permissions = temp;
+        this.isInstant = isInstant;
     }
 
     @Override
@@ -74,5 +79,16 @@ public class MyApp implements Comparable<MyApp> {
 
     @NonNull public String getPackageName() {
         return packageName;
+    }
+
+    public boolean isInstant() {
+        return isInstant;
+    }
+
+    public int getColour(Context context) {
+        if (isInstant) {
+            return  ColorUtils.getColor(context, R.color.dangerousPermission);
+        }
+        return  ColorUtils.getColor(context, R.color.safePermission);
     }
 }

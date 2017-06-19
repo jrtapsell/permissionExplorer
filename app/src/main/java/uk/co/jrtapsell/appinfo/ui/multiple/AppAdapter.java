@@ -47,6 +47,8 @@ class AppAdapter extends ArrayAdapter<MyApp> {
             throw new AssertionError("Null app detected");
         }
 
+        layout.setBackgroundColor(myApp.getColour(context));
+
         appIcon.setImageDrawable(myApp.getIcon());
 
         layout.setOnClickListener(new View.OnClickListener() {
