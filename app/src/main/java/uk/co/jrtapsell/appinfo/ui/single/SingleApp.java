@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +39,9 @@ public class SingleApp extends AppCompatActivity {
         Collections.sort(perms);
 
         listView.setAdapter(new PermissionAdapter(this, perms));
+
+        TextView appPackage = (TextView) findViewById(R.id.appName);
+        appPackage.setText(app.getPackageName());
 
         setupTopBar(app);
 
