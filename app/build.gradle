@@ -8,8 +8,8 @@ android {
         applicationId "uk.co.jrtapsell.appinfo"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.2.0"
+        versionCode 4
+        versionName "2.0.0"
     }
     buildTypes {
         release {
