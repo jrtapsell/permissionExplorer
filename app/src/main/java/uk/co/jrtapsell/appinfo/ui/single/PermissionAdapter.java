@@ -1,29 +1,33 @@
-package uk.co.jrtapsell.appinfo.ui;
+package uk.co.jrtapsell.appinfo.ui.single;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 
 import uk.co.jrtapsell.appinfo.R;
 import uk.co.jrtapsell.appinfo.data.permission.MyPermission;
+import uk.co.jrtapsell.appinfo.utils.ColorUtils;
+import uk.co.jrtapsell.appinfo.utils.ViewUtils;
 
 import static android.content.pm.PermissionInfo.*;
 
 class PermissionAdapter extends ArrayAdapter<MyPermission> {
-    public static final int RED = Color.rgb(200, 150, 150);
-    public static final int ORANGE = Color.rgb(200, 200, 150);
-    public static final int GREEN = Color.rgb(150, 200, 150);
+
+    public static final List<Pair<String, Integer>> TEXT_LABELS = Arrays.asList(
+            new Pair<>("PRIVILEGED", PROTECTION_FLAG_PRIVILEGED),
+            new Pair<>("DANGEROUS", PROTECTION_DANGEROUS),
+            new Pair<>("SIGNATURE", PROTECTION_SIGNATURE),
+            new Pair<>("PREINSTALLED", PROTECTION_FLAG_PREINSTALLED)
+    );
 
     public PermissionAdapter(Context singleApp, List<MyPermission> app) {
         super(singleApp, R.layout.single_permission, app);
@@ -34,8 +38,13 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         MyPermission perm = getItem(position);
 
+        if (perm == null) {
+            throw new AssertionError("Null permission");
+        }
+
+        Context context = getContext();
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_permission, parent, false);
+            convertView = ViewUtils.createView(parent, context, R.layout.single_permission);
         }
         TextView name = (TextView) convertView.findViewById(R.id.permissionName);
         String name1 = perm.getName();
@@ -44,19 +53,14 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         name.setText(letters, 0, letters.length);
         TextView desc = (TextView) convertView.findViewById(R.id.permissionDescription);
         if (perm.getDescription() == null) {
-            desc.setText("No description provided");
+            desc.setText(R.string.missing_description);
         } else {
             desc.setText(perm.getDescription());
         }
 
         TextView labelText = (TextView) convertView.findViewById(R.id.permissionLevel);
         StringBuilder labeler = new StringBuilder();
-        for (Pair<String, Integer> level : new Pair[]{
-                new Pair<>("PRIVILEGED", PROTECTION_FLAG_PRIVILEGED),
-                new Pair<>("DANGEROUS", PROTECTION_DANGEROUS),
-                new Pair<>("SIGNATURE", PROTECTION_SIGNATURE),
-                new Pair<>("PREINSTALLED", PROTECTION_FLAG_PREINSTALLED)
-        }) {
+        for (Pair<String, Integer> level : TEXT_LABELS) {
             if (perm.checkFlag(level.second)) {
                 labeler.append(level.first);
                 labeler.append(" ");
@@ -70,17 +74,14 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         GridLayout gl = (GridLayout) convertView.findViewById(R.id.permissionBox);
         int color;
         if (perm.checkFlag(PROTECTION_FLAG_PRIVILEGED)) {
-            color = getColor(R.color.privilegedPermission);
+            color = ColorUtils.getColor(context, R.color.privilegedPermission);
         } else if (perm.checkFlag(PROTECTION_DANGEROUS)) {
-            color = getColor(R.color.dangerousPermission);
+            color = ColorUtils.getColor(context, R.color.dangerousPermission);
         } else {
-            color = getColor(R.color.safePermission);
+            color = ColorUtils.getColor(context, R.color.safePermission);
         }
         gl.setBackgroundColor(color);
         return convertView;
     }
 
-    private int getColor(int name) {
-        return ContextCompat.getColorStateList(getContext(), name).getDefaultColor();
-    }
 }

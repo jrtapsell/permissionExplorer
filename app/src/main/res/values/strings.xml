@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Permissions Explorer</string>
     <string name="title_activity_app">AppActivity</string>
+    <string name="missing_description">No description provided</string>
 </resources>

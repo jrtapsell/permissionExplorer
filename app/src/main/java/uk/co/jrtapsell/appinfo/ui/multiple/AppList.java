@@ -1,4 +1,4 @@
-package uk.co.jrtapsell.appinfo.ui;
+package uk.co.jrtapsell.appinfo.ui.multiple;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;

@@ -1,9 +1,8 @@
-package uk.co.jrtapsell.appinfo.ui;
+package uk.co.jrtapsell.appinfo.ui.multiple;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,6 +17,7 @@ import java.util.List;
 
 import uk.co.jrtapsell.appinfo.R;
 import uk.co.jrtapsell.appinfo.data.app.MyApp;
+import uk.co.jrtapsell.appinfo.ui.single.SingleApp;
 import uk.co.jrtapsell.appinfo.utils.ViewUtils;
 
 class AppAdapter extends ArrayAdapter<MyApp> {
@@ -34,7 +34,7 @@ class AppAdapter extends ArrayAdapter<MyApp> {
         @Nullable final MyApp myApp = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.app_list_item, parent, false);
+            convertView = ViewUtils.createView(parent, context, R.layout.app_list_item);
         }
 
         @NotNull final TextView appName = ViewUtils.getTextView(convertView, R.id.appName);
@@ -44,11 +44,7 @@ class AppAdapter extends ArrayAdapter<MyApp> {
         @NotNull final GridLayout layout = ViewUtils.getGridLayout(convertView, R.id.appOuter);
 
         if (myApp == null) {
-            appName.setText("NULL APP");
-            appIcon.setImageDrawable(null);
-            appPackage.setText("NULL PACKAGE");
-            appType.setText("NULL TYPE");
-            return convertView;
+            throw new AssertionError("Null app detected");
         }
 
         appIcon.setImageDrawable(myApp.getIcon());
