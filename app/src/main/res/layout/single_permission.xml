@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/permissionBox"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +14,6 @@
         android:layout_row="0"
         android:layout_rowSpan="1"
         android:layout_rowWeight="1"
-        android:text="Name"
         android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     <TextView
@@ -25,8 +23,7 @@
         android:layout_column="0"
         android:layout_row="1"
         android:layout_rowSpan="1"
-        android:layout_rowWeight="1"
-        android:text="Description" />
+        android:layout_rowWeight="1" />
 
     <TextView
         android:id="@+id/permissionLevel"
@@ -36,6 +33,5 @@
         android:layout_row="2"
         android:layout_rowSpan="1"
         android:layout_rowWeight="1"
-        android:text="Level"
         android:textAlignment="textEnd" />
 </GridLayout>
