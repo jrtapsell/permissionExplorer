@@ -1,6 +1,7 @@
 package uk.co.jrtapsell.appinfo.data.permission;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +44,13 @@ public class MyPermission implements Comparable<MyPermission>{
         return checkFlag(PROTECTION_DANGEROUS);
     }
 
+    @SuppressWarnings("deprecation")
     public boolean isPrivileged() {
-        return checkFlag(PROTECTION_FLAG_PRIVILEGED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return checkFlag(PROTECTION_FLAG_PRIVILEGED);
+        } else {
+            return checkFlag(PROTECTION_FLAG_SYSTEM);
+        }
     }
 
     public boolean checkFlag(int check) {

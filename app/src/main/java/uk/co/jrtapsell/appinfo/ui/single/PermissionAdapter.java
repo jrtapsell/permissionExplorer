@@ -26,7 +26,8 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
             new Pair<>("PRIVILEGED", PROTECTION_FLAG_PRIVILEGED),
             new Pair<>("DANGEROUS", PROTECTION_DANGEROUS),
             new Pair<>("SIGNATURE", PROTECTION_SIGNATURE),
-            new Pair<>("PREINSTALLED", PROTECTION_FLAG_PREINSTALLED)
+            new Pair<>("PREINSTALLED", PROTECTION_FLAG_PREINSTALLED),
+            new Pair<>("SYSTEM", PROTECTION_FLAG_SYSTEM)
     );
 
     public PermissionAdapter(Context singleApp, List<MyPermission> app) {

@@ -23,7 +23,6 @@ public class MyApp implements Comparable<MyApp> {
     @NotNull private final Drawable icon;
     @NotNull private final String packageName;
     private final boolean isInstant;
-    private int color;
 
     @NotNull public List<MyPermission> getPermissions() {
         return permissions;
@@ -69,10 +68,6 @@ public class MyApp implements Comparable<MyApp> {
 
     @NonNull public String getPackageName() {
         return packageName;
-    }
-
-    public boolean isInstant() {
-        return isInstant;
     }
 
     public int getColour(Context context) {
