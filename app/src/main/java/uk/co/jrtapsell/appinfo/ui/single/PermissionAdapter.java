@@ -20,6 +20,7 @@ import uk.co.jrtapsell.appinfo.utils.ViewUtils;
 import static android.content.pm.PermissionInfo.*;
 
 class PermissionAdapter extends ArrayAdapter<MyPermission> {
+    private final Context context = getContext();
 
     public static final List<Pair<String, Integer>> TEXT_LABELS = Arrays.asList(
             new Pair<>("PRIVILEGED", PROTECTION_FLAG_PRIVILEGED),
@@ -32,29 +33,24 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         super(singleApp, R.layout.single_permission, app);
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        MyPermission perm = getItem(position);
+    @NonNull public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        final MyPermission perm = getItem(position);
 
         if (perm == null) {
             throw new AssertionError("Null permission");
         }
 
-        Context context = getContext();
         if (convertView == null) {
             convertView = ViewUtils.createView(parent, context, R.layout.single_permission);
         }
 
         TextView name = ViewUtils.getTextView(convertView, R.id.permissionName);
-        TextView desc = ViewUtils.getTextView(convertView, R.id.permissionDescription);
-        TextView labelText = ViewUtils.getTextView(convertView, R.id.permissionLevel);
-        GridLayout gl = ViewUtils.getGridLayout(convertView, R.id.permissionBox);
-
         char[] letters = convertName(perm.getName());
 
         name.setText(letters, 0, letters.length);
 
+        TextView desc = ViewUtils.getTextView(convertView, R.id.permissionDescription);
         if (perm.getDescription() == null) {
             desc.setText(R.string.missing_description);
         } else {
@@ -62,11 +58,12 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         }
 
         StringBuilder labeler = makeTextLabels(perm);
-
+        TextView labelText = ViewUtils.getTextView(convertView, R.id.permissionLevel);
         labelText.setText(labeler.toString());
 
-        int color = perm.getColour(context);
-        gl.setBackgroundColor(color);
+        GridLayout gl = ViewUtils.getGridLayout(convertView, R.id.permissionBox);
+        gl.setBackgroundColor(perm.getColour(context));
+
         return convertView;
     }
 
