@@ -22,7 +22,7 @@ public class SingleApp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppFactory appFactory = AppFactory.getInstance(getPackageManager());
+        final AppFactory appFactory = AppFactory.getInstance(getPackageManager());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_app);
         Bundle intentExtras = getIntent().getExtras();
