@@ -46,4 +46,14 @@ public class PermissionFactory {
     public MyPermission unknownPermission(String permName) {
         return new MyPermission(permName, "Permission unknown by system", PermissionInfo.PROTECTION_DANGEROUS);
     }
+
+    @NonNull
+    public MyPermission getPermission(String permName) {
+        try {
+            PermissionInfo perm = packageManager.getPermissionInfo(permName, PackageManager.GET_META_DATA);
+            return get(perm);
+        } catch (PackageManager.NameNotFoundException ex) {
+            return  (unknownPermission(permName));
+        }
+    }
 }

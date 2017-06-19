@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -19,9 +18,6 @@ import uk.co.jrtapsell.appinfo.data.permission.MyPermission;
 import uk.co.jrtapsell.appinfo.data.permission.PermissionFactory;
 import uk.co.jrtapsell.appinfo.utils.ColorUtils;
 
-import static android.content.pm.PermissionInfo.PROTECTION_DANGEROUS;
-import static android.content.pm.PermissionInfo.PROTECTION_FLAG_PRIVILEGED;
-
 public class MyApp implements Comparable<MyApp> {
     @NotNull private final String name;
     @NotNull private final Drawable icon;
@@ -35,23 +31,17 @@ public class MyApp implements Comparable<MyApp> {
 
     @NotNull private final List<MyPermission> permissions = new ArrayList<>();
 
-    MyApp(ApplicationInfo info, PackageManager p) {
+    MyApp(ApplicationInfo info, PackageManager manager) {
         boolean isInstant = false;
-        PermissionFactory pf = PermissionFactory.getInstance(p);
-        this.name = Objects.toString(info.loadLabel(p));
-        this.icon = info.loadIcon(p);
+        PermissionFactory pf = PermissionFactory.getInstance(manager);
+        this.name = Objects.toString(info.loadLabel(manager));
+        this.icon = info.loadIcon(manager);
         this.packageName = info.packageName;
         try {
-            PackageInfo pi = p.getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS);
-            if (pi.requestedPermissions != null) {
-                for (String permName : pi.requestedPermissions) {
-                    try {
-                        PermissionInfo perm = p.getPermissionInfo(permName, PackageManager.GET_META_DATA);
-                        MyPermission myPermission = pf.get(perm);
-                        permissions.add(myPermission);
-                    } catch (PackageManager.NameNotFoundException ex) {
-                        permissions.add(pf.unknownPermission(permName));
-                    }
+            PackageInfo packageInfo = manager.getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS);
+            if (packageInfo.requestedPermissions != null) {
+                for (String permName : packageInfo.requestedPermissions) {
+                    permissions.add(pf.getPermission(permName));
                 }
             }
         } catch (PackageManager.NameNotFoundException ex) {
