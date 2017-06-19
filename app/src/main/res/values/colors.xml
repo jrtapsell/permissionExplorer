@@ -7,4 +7,7 @@
     <color name="safePermission">#7760a464</color>
     <color name="dangerousPermission">#77a38860</color>
     <color name="privilegedPermission">#77a46060</color>
+    
+    <color name="instantApp">#7760a474</color>
+    <color name="normalApp">#776078a4</color>
 </resources>

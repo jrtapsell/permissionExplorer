@@ -77,8 +77,8 @@ public class MyApp implements Comparable<MyApp> {
 
     public int getColour(Context context) {
         if (isInstant) {
-            return  ColorUtils.getColor(context, R.color.dangerousPermission);
+            return  ColorUtils.getColor(context, R.color.instantApp);
         }
-        return  ColorUtils.getColor(context, R.color.safePermission);
+        return  ColorUtils.getColor(context, R.color.normalApp);
     }
 }
