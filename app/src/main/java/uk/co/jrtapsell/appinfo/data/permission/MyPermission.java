@@ -1,9 +1,13 @@
 package uk.co.jrtapsell.appinfo.data.permission;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import uk.co.jrtapsell.appinfo.R;
+import uk.co.jrtapsell.appinfo.utils.ColorUtils;
 
 import static android.content.pm.PermissionInfo.*;
 
@@ -53,5 +57,14 @@ public class MyPermission implements Comparable<MyPermission>{
 
     @NonNull public String getName() {
         return name;
+    }
+
+    public int getColour(Context context) {
+        if (checkFlag(PROTECTION_FLAG_PRIVILEGED)) {
+            return ColorUtils.getColor(context, R.color.privilegedPermission);
+        } else if (checkFlag(PROTECTION_DANGEROUS)) {
+            return  ColorUtils.getColor(context, R.color.dangerousPermission);
+        }
+        return  ColorUtils.getColor(context, R.color.safePermission);
     }
 }

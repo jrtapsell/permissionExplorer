@@ -33,7 +33,7 @@ public class SingleApp extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
 
         final MyApp app = getApp();
-        
+
         List<MyPermission> perms = app.getPermissions();
         Collections.sort(perms);
 

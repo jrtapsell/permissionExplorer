@@ -15,7 +15,6 @@ import java.util.List;
 
 import uk.co.jrtapsell.appinfo.R;
 import uk.co.jrtapsell.appinfo.data.permission.MyPermission;
-import uk.co.jrtapsell.appinfo.utils.ColorUtils;
 import uk.co.jrtapsell.appinfo.utils.ViewUtils;
 
 import static android.content.pm.PermissionInfo.*;
@@ -46,19 +45,33 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         if (convertView == null) {
             convertView = ViewUtils.createView(parent, context, R.layout.single_permission);
         }
-        TextView name = (TextView) convertView.findViewById(R.id.permissionName);
-        String name1 = perm.getName();
-        char[] letters = name1.toCharArray();
-        letters[name1.lastIndexOf('.')] = '\n';
+
+        TextView name = ViewUtils.getTextView(convertView, R.id.permissionName);
+        TextView desc = ViewUtils.getTextView(convertView, R.id.permissionDescription);
+        TextView labelText = ViewUtils.getTextView(convertView, R.id.permissionLevel);
+        GridLayout gl = ViewUtils.getGridLayout(convertView, R.id.permissionBox);
+
+        char[] letters = convertName(perm.getName());
+
         name.setText(letters, 0, letters.length);
-        TextView desc = (TextView) convertView.findViewById(R.id.permissionDescription);
+
         if (perm.getDescription() == null) {
             desc.setText(R.string.missing_description);
         } else {
             desc.setText(perm.getDescription());
         }
 
-        TextView labelText = (TextView) convertView.findViewById(R.id.permissionLevel);
+        StringBuilder labeler = makeTextLabels(perm);
+
+        labelText.setText(labeler.toString());
+
+        int color = perm.getColour(context);
+        gl.setBackgroundColor(color);
+        return convertView;
+    }
+
+    @NonNull
+    private StringBuilder makeTextLabels(MyPermission perm) {
         StringBuilder labeler = new StringBuilder();
         for (Pair<String, Integer> level : TEXT_LABELS) {
             if (perm.checkFlag(level.second)) {
@@ -69,19 +82,13 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         if (labeler.length() == 0) {
             labeler.append("NORMAL");
         }
-        labelText.setText(labeler.toString());
+        return labeler;
+    }
 
-        GridLayout gl = (GridLayout) convertView.findViewById(R.id.permissionBox);
-        int color;
-        if (perm.checkFlag(PROTECTION_FLAG_PRIVILEGED)) {
-            color = ColorUtils.getColor(context, R.color.privilegedPermission);
-        } else if (perm.checkFlag(PROTECTION_DANGEROUS)) {
-            color = ColorUtils.getColor(context, R.color.dangerousPermission);
-        } else {
-            color = ColorUtils.getColor(context, R.color.safePermission);
-        }
-        gl.setBackgroundColor(color);
-        return convertView;
+    private char[] convertName(String name1) {
+        char[] letters = name1.toCharArray();
+        letters[name1.lastIndexOf('.')] = '\n';
+        return letters;
     }
 
 }
