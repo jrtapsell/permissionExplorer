@@ -11,9 +11,17 @@
     tools:context="uk.co.jrtapsell.appinfo.ui.AppList">
 
     <ListView
+        android:id="@+id/appList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/appList"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:visibility="invisible"></ListView>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 </RelativeLayout>

@@ -1,24 +1,20 @@
 package uk.co.jrtapsell.appinfo.data.permission;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static android.content.pm.PermissionInfo.*;
 
-/**
- * Created by james on 07/06/17.
- */
-
 public class MyPermission implements Comparable<MyPermission>{
-    private final String name;
-    private final String description;
-    private final Drawable icon;
+    @NotNull private final String name;
+    @Nullable private final String description;
     private final int level;
 
-    public MyPermission(String name, String description, Drawable icon, int level) {
+    MyPermission(@NotNull String name, @Nullable String description, int level) {
         this.name = name;
         this.description = description;
-        this.icon = icon;
         this.level = level;
     }
 
@@ -47,16 +43,15 @@ public class MyPermission implements Comparable<MyPermission>{
         return checkFlag(PROTECTION_FLAG_PRIVILEGED);
     }
 
-
     public boolean checkFlag(int check) {
         return (check & level) != 0;
     }
 
-    public String getDescription() {
+    @Nullable public String getDescription() {
         return description;
     }
 
-    public String getName() {
+    @NonNull public String getName() {
         return name;
     }
 }

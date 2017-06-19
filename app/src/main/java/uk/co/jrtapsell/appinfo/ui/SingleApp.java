@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Collection;
@@ -21,14 +22,16 @@ import uk.co.jrtapsell.appinfo.data.permission.MyPermission;
 
 public class SingleApp extends AppCompatActivity {
 
-    private static final AppFactory af = AppFactory.getInstance();
+    private AppFactory af;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        af = AppFactory.getInstance(getPackageManager());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_app);
-        final MyApp app = af.getApp(getIntent().getExtras().getString("app"), getPackageManager());
+        final MyApp app = af.getApp(getIntent().getExtras().getString("app"));
         ListView lv = (ListView) findViewById(R.id.permissionsId);
+        ProgressBar bar = (ProgressBar) findViewById(R.id.progress);
         List<MyPermission> perms = app.getPermissions();
         Collections.sort(perms);
         lv.setAdapter(new PermissionAdapter(this, perms));
@@ -64,5 +67,7 @@ public class SingleApp extends AppCompatActivity {
                 startActivity(openIntent);
             }
         });
+        bar.setVisibility(View.INVISIBLE);
+        lv.setVisibility(View.VISIBLE);
     }
 }

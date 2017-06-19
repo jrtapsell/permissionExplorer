@@ -1,9 +1,10 @@
 package uk.co.jrtapsell.appinfo.ui;
 
-import android.content.pm.PermissionInfo;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,20 +16,17 @@ import android.widget.TextView;
 import java.util.List;
 
 import uk.co.jrtapsell.appinfo.R;
-import uk.co.jrtapsell.appinfo.data.app.MyApp;
 import uk.co.jrtapsell.appinfo.data.permission.MyPermission;
 
 import static android.content.pm.PermissionInfo.*;
 
-/**
- * Created by james on 07/06/17.
- */
 class PermissionAdapter extends ArrayAdapter<MyPermission> {
-    private SingleApp singleApp;
+    public static final int RED = Color.rgb(200, 150, 150);
+    public static final int ORANGE = Color.rgb(200, 200, 150);
+    public static final int GREEN = Color.rgb(150, 200, 150);
 
-    public PermissionAdapter(SingleApp singleApp, List<MyPermission> app) {
+    public PermissionAdapter(Context singleApp, List<MyPermission> app) {
         super(singleApp, R.layout.single_permission, app);
-        this.singleApp = singleApp;
     }
 
     @NonNull
@@ -72,13 +70,17 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
         GridLayout gl = (GridLayout) convertView.findViewById(R.id.permissionBox);
         int color;
         if (perm.checkFlag(PROTECTION_FLAG_PRIVILEGED)) {
-            color = Color.rgb(200, 150, 150);
+            color = getColor(R.color.privilegedPermission);
         } else if (perm.checkFlag(PROTECTION_DANGEROUS)) {
-            color = Color.rgb(200, 200, 150);
+            color = getColor(R.color.dangerousPermission);
         } else {
-            color = Color.rgb(150, 200, 150);
+            color = getColor(R.color.safePermission);
         }
         gl.setBackgroundColor(color);
         return convertView;
+    }
+
+    private int getColor(int name) {
+        return ContextCompat.getColorStateList(getContext(), name).getDefaultColor();
     }
 }

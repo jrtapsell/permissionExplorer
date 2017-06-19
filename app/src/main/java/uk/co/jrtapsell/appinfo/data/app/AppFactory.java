@@ -3,6 +3,9 @@ package uk.co.jrtapsell.appinfo.data.app;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,22 +13,28 @@ import java.util.List;
 
 public class AppFactory {
 
-    private HashMap<String, MyApp> apps = null;
+    @NotNull private final PackageManager manager;
+    @Nullable private HashMap<String, MyApp> apps = null;
 
-    private static final AppFactory INSTANCE = new AppFactory();
+    @Nullable private static AppFactory INSTANCE;
 
-    private AppFactory() {}
+    private AppFactory(@NotNull final PackageManager manager) {
+        this.manager = manager;
+    }
 
-    public static AppFactory getInstance() {
+    @NotNull public static AppFactory getInstance(final PackageManager manager) {
+        if (INSTANCE == null) {
+            INSTANCE = new AppFactory(manager);
+        }
         return INSTANCE;
     }
 
-    public List<MyApp> getApps(final PackageManager manager) {
+    @NotNull public List<MyApp> getApps() {
         if (apps == null) {
             apps = new HashMap<>();
             List<ApplicationInfo> apps2 = manager.getInstalledApplications(0);
             for (ApplicationInfo app : apps2) {
-                MyApp temp = spawn(app, manager);
+                MyApp temp = new MyApp(app, manager);
                 apps.put(temp.getPackageName(), temp);
             }
         }
@@ -35,19 +44,16 @@ public class AppFactory {
         return all;
     }
 
-    public MyApp getApp(String packageName, PackageManager pm) {
+    @NotNull public MyApp getApp(@NotNull String packageName) {
         if (apps != null && apps.containsKey(packageName)) {
             return apps.get(packageName);
         }
         try {
-            ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            return spawn(info, pm);
+            ApplicationInfo info = manager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            return new MyApp(info, manager);
         } catch (PackageManager.NameNotFoundException ex) {
-            return null;
+            throw new AssertionError(ex);
         }
     }
 
-    public MyApp spawn(ApplicationInfo info, PackageManager p) {
-        return new MyApp(info, p);
-    }
 }

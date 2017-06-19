@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "uk.co.jrtapsell.appinfo"
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion 23
+        targetSdkVersion 23
         versionCode 3
         versionName "1.2.0"
     }
@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile 'org.jetbrains:annotations-java5:15.0'
 }

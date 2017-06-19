@@ -2,42 +2,48 @@ package uk.co.jrtapsell.appinfo.data.permission;
 
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
-import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Created by james on 07/06/17.
- */
-
 public class PermissionFactory {
 
-    private static final PermissionFactory INSTANCE = new PermissionFactory();
+    @Nullable private static PermissionFactory INSTANCE;
+    @NotNull private final PackageManager packageManager;
 
-    private PermissionFactory() {}
+    private PermissionFactory(@NonNull final PackageManager packageManager) {
+        this.packageManager = packageManager;
+    }
 
-    public static PermissionFactory getInstance() {
+    @NotNull public static PermissionFactory getInstance(@NotNull final PackageManager packageManager) {
+        if (INSTANCE == null) {
+            INSTANCE = new PermissionFactory(packageManager);
+        }
         return INSTANCE;
     }
 
-    private static final Map<String, MyPermission> seen = new HashMap<>();
+    @NotNull private static final Map<String, MyPermission> seen = new HashMap<>();
 
-    public MyPermission get(PermissionInfo info, PackageManager p) {
+    @NotNull public MyPermission get(PermissionInfo info) {
         if (seen.containsKey(info.name)) {
             return seen.get(info.name);
         }
-        Drawable icon = info.loadIcon(p);
-        CharSequence description = info.loadDescription(p);
+        CharSequence description = info.loadDescription(packageManager);
         MyPermission perm = new MyPermission(
                 info.name,
                 description != null ? Objects.toString(description) : null,
-                icon,
                 info.protectionLevel
         );
         seen.put(info.name, perm);
         return perm;
     }
 
+    public MyPermission unknownPermission(String permName) {
+        return new MyPermission(permName, "Permission unknown by system", PermissionInfo.PROTECTION_DANGEROUS);
+    }
 }
