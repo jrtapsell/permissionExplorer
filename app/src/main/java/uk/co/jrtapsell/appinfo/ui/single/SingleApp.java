@@ -31,7 +31,6 @@ public class SingleApp extends AppCompatActivity {
         setContentView(R.layout.activity_single_app);
 
         ListView listView = (ListView) findViewById(R.id.permissionsId);
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
 
         final MyApp app = getApp();
 
@@ -46,8 +45,6 @@ public class SingleApp extends AppCompatActivity {
         setupTopBar(app);
 
         setupButtons(app);
-        progressBar.setVisibility(View.INVISIBLE);
-        listView.setVisibility(View.VISIBLE);
     }
 
     @NonNull
