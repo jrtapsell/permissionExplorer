@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="uk.co.jrtapsell.appinfo.ui.multiple.AppList">
+    tools:context="uk.co.jrtapsell.appinfo.ui.multiple.AppList"
+    android:id="@+id/appListContainer">
 
     <ListView
         android:id="@+id/appList"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="invisible" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@id/appListContainer"
+        app:layout_constraintRight_toRightOf="@id/appListContainer"
+        app:layout_constraintTop_toTopOf="@id/appListContainer"
+        app:layout_constraintBottom_toBottomOf="@id/appListContainer"/>
 
     <ProgressBar
         android:id="@+id/progress"
         style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
-</RelativeLayout>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@id/appListContainer"
+        app:layout_constraintRight_toRightOf="@id/appListContainer"
+        app:layout_constraintTop_toTopOf="@id/appListContainer"
+        app:layout_constraintBottom_toBottomOf="@id/appListContainer"/>
+</android.support.constraint.ConstraintLayout>
