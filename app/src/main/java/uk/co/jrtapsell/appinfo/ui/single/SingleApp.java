@@ -2,6 +2,8 @@ package uk.co.jrtapsell.appinfo.ui.single;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -58,7 +60,7 @@ public class SingleApp extends AppCompatActivity {
     }
 
     private void setupButtons(MyApp app) {
-        final Intent manageIntent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        final Intent manageIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         manageIntent.addCategory(Intent.CATEGORY_DEFAULT);
         manageIntent.setData(Uri.parse("package:" + app.getPackageName()));
 
@@ -77,7 +79,10 @@ public class SingleApp extends AppCompatActivity {
 
         if (openIntent == null) {
             openButton.setEnabled(false);
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                openButton.setBackgroundTintList(getResources().getColorStateList(R.color.colorPrimaryDark));
+            }
+        } else
 
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
