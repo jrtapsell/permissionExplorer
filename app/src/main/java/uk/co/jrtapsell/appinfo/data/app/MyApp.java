@@ -37,16 +37,20 @@ public class MyApp implements Comparable<MyApp> {
         this.icon = info.loadIcon(manager);
         this.packageName = info.packageName;
         try {
-            PackageInfo packageInfo = manager.getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS);
-            if (packageInfo.requestedPermissions != null) {
-                for (String permName : packageInfo.requestedPermissions) {
-                    permissions.add(pf.getPermission(permName));
-                }
-            }
+            processPermissions(info, manager, pf);
         } catch (PackageManager.NameNotFoundException ex) {
             isInstant = true;
         }
         this.isInstant = isInstant;
+    }
+
+    private void processPermissions(ApplicationInfo info, PackageManager manager, PermissionFactory pf) throws PackageManager.NameNotFoundException {
+        PackageInfo packageInfo = manager.getPackageInfo(info.packageName, PackageManager.GET_PERMISSIONS);
+        if (packageInfo.requestedPermissions != null) {
+            for (String permName : packageInfo.requestedPermissions) {
+                permissions.add(pf.getPermission(permName));
+            }
+        }
     }
 
     @Override
