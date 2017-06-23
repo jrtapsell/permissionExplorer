@@ -33,24 +33,30 @@ class AppAdapter extends ArrayAdapter<MyApp> {
 
         @Nullable final MyApp myApp = getItem(position);
 
-        if (convertView == null) {
-            convertView = ViewUtils.createView(parent, context, R.layout.app_list_item);
-        }
-
-        @NotNull final TextView appName = ViewUtils.getTextView(convertView, R.id.appName);
-        @NotNull final TextView appPackage = ViewUtils.getTextView(convertView, R.id.appPackage);
-        @NotNull final TextView appType = ViewUtils.getTextView(convertView, R.id.appType);
-        @NotNull final ImageView appIcon = ViewUtils.getImageView(convertView, R.id.appIcon);
-        @NotNull final GridLayout layout = ViewUtils.getGridLayout(convertView, R.id.appOuter);
-
         if (myApp == null) {
             throw new AssertionError("Null app detected");
         }
 
-        layout.setBackgroundColor(myApp.getColour(context));
+        if (convertView == null) {
+            convertView = ViewUtils.createView(parent, context, R.layout.app_list_item);
+        }
 
+        setAppName(convertView, myApp);
+        setAppPackage(convertView, myApp);
+        setAppPerms(convertView, myApp);
+        setAppIcon(convertView, myApp);
+        setupLayout(convertView, myApp);
+        return convertView;
+    }
+
+    private void setAppIcon(@Nullable View convertView, MyApp myApp) {
+        @NotNull final ImageView appIcon = ViewUtils.getImageView(convertView, R.id.appIcon);
         appIcon.setImageDrawable(myApp.getIcon());
+    }
 
+    private void setupLayout(@Nullable View convertView, final MyApp myApp) {
+        @NotNull final GridLayout layout = ViewUtils.getGridLayout(convertView, R.id.appOuter);
+        layout.setBackgroundColor(myApp.getColour(context));
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,11 +65,21 @@ class AppAdapter extends ArrayAdapter<MyApp> {
                 context.startActivity(i);
             }
         });
+    }
 
-        appName.setText(myApp.getName());
+    private void setAppPerms(@Nullable View convertView, MyApp myApp) {
+        @NotNull final TextView appPerms = ViewUtils.getTextView(convertView, R.id.appPerms);
+        appPerms.setText(myApp.getPerms());
+    }
+
+    private void setAppPackage(@Nullable View convertView, MyApp myApp) {
+        @NotNull final TextView appPackage = ViewUtils.getTextView(convertView, R.id.appPackage);
         appPackage.setText(myApp.getPackageName());
-        appType.setText(myApp.getPerms());
-        return convertView;
+    }
+
+    private void setAppName(@Nullable View convertView, MyApp myApp) {
+        @NotNull final TextView appName = ViewUtils.getTextView(convertView, R.id.appName);
+        appName.setText(myApp.getName());
     }
 
 }
