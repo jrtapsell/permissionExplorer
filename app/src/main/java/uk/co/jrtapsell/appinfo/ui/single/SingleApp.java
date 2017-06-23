@@ -60,12 +60,14 @@ public class SingleApp extends AppCompatActivity {
     }
 
     private void setupButtons(MyApp app) {
+        setupManageButton(app);
+        setupOpenButton(app);
+    }
+
+    private void setupManageButton(MyApp app) {
         final Intent manageIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         manageIntent.addCategory(Intent.CATEGORY_DEFAULT);
         manageIntent.setData(Uri.parse("package:" + app.getPackageName()));
-
-
-        final Intent openIntent = getPackageManager().getLaunchIntentForPackage(app.getPackageName());
 
 
         findViewById(R.id.manageButton).setOnClickListener(new View.OnClickListener() {
@@ -74,6 +76,10 @@ public class SingleApp extends AppCompatActivity {
                 startActivity(manageIntent);
             }
         });
+    }
+
+    private void setupOpenButton(MyApp app) {
+        final Intent openIntent = getPackageManager().getLaunchIntentForPackage(app.getPackageName());
 
         Button openButton = (Button) findViewById(R.id.openButton);
 
@@ -82,14 +88,14 @@ public class SingleApp extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 openButton.setBackgroundTintList(getResources().getColorStateList(R.color.colorPrimaryDark));
             }
-        } else
-
-        openButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(openIntent);
-            }
-        });
+        } else {
+            openButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(openIntent);
+                }
+            });
+        }
     }
 
     private void setupTopBar(MyApp app) {
