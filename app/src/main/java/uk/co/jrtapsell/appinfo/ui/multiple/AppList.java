@@ -28,9 +28,13 @@ public class AppList extends AppCompatActivity {
         appFactory = AppFactory.getInstance(getPackageManager());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_list);
-        lv = (ListView) findViewById(R.id.appList);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         adapter = new AppAdapter(this, apps);
+        setupAppList();
+    }
+
+    private void setupAppList() {
+        lv = (ListView) findViewById(R.id.appList);
         lv.setAdapter(adapter);
         new ScreenUpdater().execute();
     }
