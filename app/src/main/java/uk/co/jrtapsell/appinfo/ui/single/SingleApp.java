@@ -28,18 +28,13 @@ public class SingleApp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final MyApp app = getApp();
+
         appFactory = AppFactory.getInstance(getPackageManager());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_app);
 
-        ListView listView = (ListView) findViewById(R.id.permissionsId);
-
-        final MyApp app = getApp();
-
-        List<MyPermission> perms = app.getPermissions();
-        Collections.sort(perms);
-
-        listView.setAdapter(new PermissionAdapter(this, perms));
+        setupAppList(app);
 
         TextView appPackage = (TextView) findViewById(R.id.appName);
         appPackage.setText(app.getPackageName());
@@ -47,6 +42,13 @@ public class SingleApp extends AppCompatActivity {
         setupTopBar(app);
 
         setupButtons(app);
+    }
+
+    private void setupAppList(MyApp app) {
+        ListView listView = (ListView) findViewById(R.id.permissionsId);
+        List<MyPermission> perms = app.getPermissions();
+        Collections.sort(perms);
+        listView.setAdapter(new PermissionAdapter(this, perms));
     }
 
     @NonNull
@@ -84,18 +86,26 @@ public class SingleApp extends AppCompatActivity {
         Button openButton = (Button) findViewById(R.id.openButton);
 
         if (openIntent == null) {
-            openButton.setEnabled(false);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                openButton.setBackgroundTintList(getResources().getColorStateList(R.color.colorPrimaryDark));
-            }
+            setupUnopenable(openButton);
         } else {
-            openButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(openIntent);
-                }
-            });
+            setupOpenable(openIntent, openButton);
         }
+    }
+
+    private void setupUnopenable(Button openButton) {
+        openButton.setEnabled(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            openButton.setBackgroundTintList(getResources().getColorStateList(R.color.colorPrimaryDark));
+        }
+    }
+
+    private void setupOpenable(final Intent openIntent, Button openButton) {
+        openButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(openIntent);
+            }
+        });
     }
 
     private void setupTopBar(MyApp app) {
