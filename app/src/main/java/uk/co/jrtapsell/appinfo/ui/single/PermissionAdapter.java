@@ -46,26 +46,38 @@ class PermissionAdapter extends ArrayAdapter<MyPermission> {
             convertView = ViewUtils.createView(parent, context, R.layout.single_permission);
         }
 
-        TextView name = ViewUtils.getTextView(convertView, R.id.permissionName);
-        char[] letters = convertName(perm.getName());
+        setPermissionName(convertView, perm);
+        setAppDescription(convertView, perm);
+        setAppLabel(convertView, perm);
+        setAppColour(convertView, perm);
 
-        name.setText(letters, 0, letters.length);
+        return convertView;
+    }
 
+    private void setAppColour(@Nullable View convertView, MyPermission perm) {
+        GridLayout gl = ViewUtils.getGridLayout(convertView, R.id.permissionBox);
+        gl.setBackgroundColor(perm.getColour(context));
+    }
+
+    private void setAppLabel(@Nullable View convertView, MyPermission perm) {
+        StringBuilder labeler = makeTextLabels(perm);
+        TextView labelText = ViewUtils.getTextView(convertView, R.id.permissionLevel);
+        labelText.setText(labeler.toString());
+    }
+
+    private void setAppDescription(@Nullable View convertView, MyPermission perm) {
         TextView desc = ViewUtils.getTextView(convertView, R.id.permissionDescription);
         if (perm.getDescription() == null) {
             desc.setText(R.string.missing_description);
         } else {
             desc.setText(perm.getDescription());
         }
+    }
 
-        StringBuilder labeler = makeTextLabels(perm);
-        TextView labelText = ViewUtils.getTextView(convertView, R.id.permissionLevel);
-        labelText.setText(labeler.toString());
-
-        GridLayout gl = ViewUtils.getGridLayout(convertView, R.id.permissionBox);
-        gl.setBackgroundColor(perm.getColour(context));
-
-        return convertView;
+    private void setPermissionName(@Nullable View convertView, MyPermission perm) {
+        TextView name = ViewUtils.getTextView(convertView, R.id.permissionName);
+        char[] letters = convertName(perm.getName());
+        name.setText(letters, 0, letters.length);
     }
 
     @NonNull
