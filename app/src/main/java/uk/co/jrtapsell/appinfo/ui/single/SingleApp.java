@@ -28,20 +28,24 @@ public class SingleApp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final MyApp app = getApp();
 
         appFactory = AppFactory.getInstance(getPackageManager());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_app);
+        
+        setupApp(getApp());
+    }
 
+    private void setupApp(MyApp app) {
         setupAppList(app);
+        setAppPackage(app);
+        setupTopBar(app);
+        setupButtons(app);
+    }
 
+    private void setAppPackage(MyApp app) {
         TextView appPackage = (TextView) findViewById(R.id.appName);
         appPackage.setText(app.getPackageName());
-
-        setupTopBar(app);
-
-        setupButtons(app);
     }
 
     private void setupAppList(MyApp app) {
