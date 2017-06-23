@@ -2,6 +2,7 @@ package uk.co.jrtapsell.appinfo.data.app;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,17 +32,26 @@ public class AppFactory {
 
     @NotNull public List<MyApp> getApps() {
         if (apps == null) {
-            apps = new HashMap<>();
-            List<ApplicationInfo> apps2 = manager.getInstalledApplications(0);
-            for (ApplicationInfo app : apps2) {
-                MyApp temp = new MyApp(app, manager);
-                apps.put(temp.getPackageName(), temp);
-            }
+            spawnApps();
         }
+        return cloneApps();
+    }
+
+    @NonNull
+    private List<MyApp> cloneApps() {
         Collection<MyApp> items = apps.values();
         List<MyApp> all = new ArrayList<>(items.size());
         all.addAll(items);
         return all;
+    }
+
+    private void spawnApps() {
+        apps = new HashMap<>();
+        List<ApplicationInfo> apps2 = manager.getInstalledApplications(0);
+        for (ApplicationInfo app : apps2) {
+            MyApp temp = new MyApp(app, manager);
+            apps.put(temp.getPackageName(), temp);
+        }
     }
 
     @NotNull public MyApp getApp(@NotNull String packageName) {
