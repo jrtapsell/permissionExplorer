@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "uk.co.jrtapsell.appinfo"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 6
         versionName "2.2.0"
